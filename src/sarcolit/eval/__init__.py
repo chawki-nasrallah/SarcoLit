@@ -1,0 +1,1 @@
+"""Evaluation harness (retrieval metrics, generation metrics, LLM-as-judge). Lands in v0.3."""

@@ -1,0 +1,1 @@
+"""Corpus ingestion (PubMed fetch, dedup, chunking, metadata). Lands in v0.1."""

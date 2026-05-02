@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Virtual envs / package managers
+.venv/
+venv/
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Data — never commit raw corpora; use DVC or HF datasets pointers
+data/**
+!data/README.md
+!data/.gitkeep
+
+# Models / artifacts
+models/
+checkpoints/
+*.bin
+*.safetensors
+*.pt
+*.gguf
+
+# Logs
+logs/
+*.log
+wandb/
+mlruns/

@@ -1,0 +1,1 @@
+"""Agent layer: tool definitions, tool routing, multi-step reasoning. Lands in v0.6."""
