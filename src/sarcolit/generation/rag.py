@@ -16,9 +16,15 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
-from sarcolit.generation.generate import Generator
-from sarcolit.retrieval.search import Retriever, SearchHit
+# Heavy imports (torch/transformers/qdrant) are deferred into __init__ so that
+# importing this module — and printing a startup message — is instant. The slow
+# `import transformers` otherwise runs silently before any output, making the
+# CLI look frozen for ~30s on first launch.
+if TYPE_CHECKING:
+    from sarcolit.generation.generate import Generator
+    from sarcolit.retrieval.search import Retriever, SearchHit
 
 DEFAULT_K = 5
 
@@ -44,6 +50,10 @@ class RagPipeline:
         generator: Generator | None = None,
         k: int = DEFAULT_K,
     ) -> None:
+        if retriever is None or generator is None:
+            # Imported here, not at module top, to keep startup responsive.
+            from sarcolit.generation.generate import Generator
+            from sarcolit.retrieval.search import Retriever
         self.retriever = retriever or Retriever()
         self.generator = generator or Generator()
         self.k = k
@@ -82,8 +92,14 @@ def _interactive(pipeline: RagPipeline) -> None:
 def main() -> None:
     """One-shot if a question is given on the CLI, else interactive REPL."""
     question = " ".join(sys.argv[1:]).strip()
-    print("loading models (first time ~15s)...", file=sys.stderr)
+    # Flush so this shows *before* the slow torch/transformers import below,
+    # otherwise the terminal looks frozen for ~30s on first launch.
+    print(
+        "Starting SarcoLit - loading libraries and models (first launch can take ~30-60s)...",
+        flush=True,
+    )
     pipeline = RagPipeline()
+    print("Models loaded.", flush=True)
     try:
         if question:
             _print_result(pipeline.ask(question))
