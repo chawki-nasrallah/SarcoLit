@@ -2,8 +2,9 @@
 
 from dataclasses import dataclass
 
+import pytest
+
 from sarcolit.generation import prompt
-from sarcolit.generation.rag import RagPipeline
 
 
 @dataclass
@@ -60,6 +61,11 @@ class FakeGenerator:
 
 
 def test_ask_pipeline_wires_retrieval_into_generation() -> None:
+    # Importing rag pulls the ml stack; skip in CI's light env, run locally.
+    pytest.importorskip("torch")
+    pytest.importorskip("qdrant_client")
+    from sarcolit.generation.rag import RagPipeline
+
     retriever = FakeRetriever(HITS)
     generator = FakeGenerator()
     pipeline = RagPipeline(retriever=retriever, generator=generator, k=3)

@@ -8,10 +8,18 @@ import json
 from pathlib import Path
 
 import numpy as np
-from qdrant_client import QdrantClient
+import pytest
 
-from sarcolit.retrieval import index, search
-from sarcolit.retrieval.embedding import EMBED_DIM
+# These tests exercise GPU-free logic, but importing the retrieval modules pulls
+# the `ml` stack (torch via the embedder, qdrant-client). CI installs only the
+# light deps, so skip the whole module there rather than fail collection.
+pytest.importorskip("torch")
+pytest.importorskip("qdrant_client")
+
+from qdrant_client import QdrantClient  # noqa: E402
+
+from sarcolit.retrieval import index, search  # noqa: E402
+from sarcolit.retrieval.embedding import EMBED_DIM  # noqa: E402
 
 
 class StubEmbedder:
