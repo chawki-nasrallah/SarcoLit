@@ -58,18 +58,37 @@ class RagPipeline:
         self.retriever.close()
 
 
+def _print_result(result: RagAnswer) -> None:
+    print(f"\n=== ANSWER ===\n{result.answer}\n")
+    print("=== SOURCES ===")
+    for hit in result.sources:
+        print(f"  [PMID {hit.pmid}] ({hit.year}) {hit.title}")
+
+
+def _interactive(pipeline: RagPipeline) -> None:
+    """Ask questions in a loop; models stay loaded between questions."""
+    print("\nSarcoLit RAG - type a question, or blank line / Ctrl-C to quit.")
+    while True:
+        try:
+            question = input("\n> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+        if not question:
+            break
+        _print_result(pipeline.ask(question))
+
+
 def main() -> None:
+    """One-shot if a question is given on the CLI, else interactive REPL."""
     question = " ".join(sys.argv[1:]).strip()
-    if not question:
-        print('usage: python -m sarcolit.generation.rag "your question"')
-        return
+    print("loading models (first time ~15s)...", file=sys.stderr)
     pipeline = RagPipeline()
     try:
-        result = pipeline.ask(question)
-        print(f"\n=== ANSWER ===\n{result.answer}\n")
-        print("=== SOURCES ===")
-        for hit in result.sources:
-            print(f"  [PMID {hit.pmid}] ({hit.year}) {hit.title}")
+        if question:
+            _print_result(pipeline.ask(question))
+        else:
+            _interactive(pipeline)
     finally:
         pipeline.close()
 
