@@ -26,6 +26,25 @@ dev = [
     "pytest>=8",
     "ruff>=0.6",
 ]
+# Heavy GPU/ML stack for v0.2+ (retrieval + generation). Kept separate from core
+# so the ingest pipeline and CI stay lightweight (no PyTorch in the default install).
+ml = [
+    "torch>=2.4",
+    "transformers>=4.45",
+    "accelerate>=0.34",
+    "bitsandbytes>=0.43",          # 4-bit (NF4) quantization; has Windows wheels
+    "qdrant-client>=1.11",         # local vector store
+]
+
+# Pull PyTorch from the CUDA 12.1 wheel index (GPU build) rather than the
+# default CPU-only wheels. Matches the RTX 3060 (Ampere) + recent driver.
+[tool.uv.sources]
+torch = { index = "pytorch-cu121" }
+
+[[tool.uv.index]]
+name = "pytorch-cu121"
+url = "https://download.pytorch.org/whl/cu121"
+explicit = true
 
 [build-system]
 requires = ["hatchling"]
