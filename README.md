@@ -8,7 +8,7 @@ A retrieval-augmented LLM assistant for the sarcopenia and elderly muscle-health
 
 ## Status
 
-**Current tag:** `v0.2-rag-baseline` — first working end-to-end RAG. Ask a sarcopenia question and get an answer grounded in real PubMed abstracts, with PMID citations — running fully **local and open-source** (no API calls). See [Try it](#try-it) below.
+**Current tag:** `v0.3-eval` — evaluation harness + measured baseline. The RAG system (still fully **local and open-source**) now has numbers: retrieval recall@5 = 0.91, faithfulness = 0.80, with a characterised failure mode (citation misattribution). See [Eval results](#eval-results) and [Try it](#try-it). The generator remains local Qwen; only the eval *judge* uses an API model.
 
 ## Milestones
 
@@ -19,7 +19,7 @@ Each milestone is a tagged GitHub release with a dedicated release note in [`doc
 | `v0.0-scaffold` | Repo skeleton, CI, license | ✅ done |
 | `v0.1-corpus` | PubMed ingestion, cleaned sarcopenia/EMG corpus (7,004 abstracts) | ✅ done |
 | `v0.2-rag-baseline` | Naive embedding + retrieval + generation, first end-to-end answer | ✅ done |
-| `v0.3-eval-harness` | Hand-curated eval set + automated retrieval/generation metrics | ⬜ |
+| `v0.3-eval` | Eval harness + measured baseline (recall@k/MRR/nDCG, faithfulness) | ✅ done |
 | `v0.4-rag-improved` | Hybrid search, reranker, query rewriting; measured lift over `v0.2` | ⬜ |
 | `v0.5-finetune` | LoRA fine-tune of a small open model; eval comparison; model card | ⬜ |
 | `v0.6-agent` | Tool-using agent (PubMed search, citation tool) | ⬜ |
@@ -29,11 +29,13 @@ Each milestone is a tagged GitHub release with a dedicated release note in [`doc
 
 ## Eval results
 
-Filled in as milestones land. Each row reports headline retrieval and generation metrics against the curated eval set introduced in `v0.3`.
+Headline retrieval + generation metrics per tag, against the eval sets introduced in `v0.3`. Each later tag reports a delta against this baseline.
 
-| Tag | Recall@5 | MRR | Faithfulness | Answer relevance | Notes |
+| Tag | Recall@5 | MRR | nDCG@5 | Faithfulness | Notes |
 |---|---|---|---|---|---|
-| _pending v0.3_ | — | — | — | — | — |
+| `v0.3-eval` (baseline) | 0.91 | 0.78 | 0.81 | 0.80 | synthetic known-item set: retrieval n=150, faithfulness n=30 (Opus judge). Optimistic (see release note); gold set at `v0.4`. |
+
+Failure mode at baseline: **citation misattribution** (answer's core finding correct, but a specific claim pinned to the wrong source) — the target for `v0.4`/`v0.5`. Full write-up: [`docs/releases/v0.3-eval.md`](docs/releases/v0.3-eval.md).
 
 ## Project layout
 
@@ -54,6 +56,7 @@ sarcolit/
 - `ruff` (lint + format), `pytest` (tests + eval markers)
 - **Retrieval:** `BAAI/bge-base-en-v1.5` embeddings via `transformers`, [`qdrant`](https://qdrant.tech/) local vector store
 - **Generation:** `Qwen/Qwen2.5-3B-Instruct` in 4-bit NF4 (`bitsandbytes`) on GPU
+- **Eval:** in-repo metrics (recall@k/MRR/nDCG, faithfulness); Claude (`anthropic`) as LLM-judge — *eval tooling only; the RAG generator stays local*
 - _later:_ `peft`/`trl` for LoRA (`v0.5`), `fastapi`, `gradio`, HF Spaces for the demo (`v0.7`)
 
 ## Try it

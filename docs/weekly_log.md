@@ -56,3 +56,23 @@ A dated record of work sessions. The format is deliberately simple so it doesn't
   - **The baseline visibly fails sometimes — that's the point.** "Handgrip cutoffs" query: k=5 pulled a knee-extension paper and Qwen cited its values as handgrip — a faithfulness error. Logged to `eval_query_candidates.md`. You can't claim quality from anecdotes → motivates the `v0.3` eval harness. `k=5` is an untuned guess for the same reason.
   - **Drop the dep that fights you.** `sentence-transformers` segfault → going one layer down to the proven `transformers` path was faster than debugging a native crash, and left the stack leaner.
 - **Next:** `v0.3-eval` — labelled query set + retrieval/generation metrics (recall@k, MRR, nDCG, faithfulness); tune `k`; establish the baseline numbers `v0.4`/`v0.5` are measured against. Commit + tag `v0.2-rag-baseline` first.
+
+---
+
+## 2026-W28 — week of 2026-07-06
+
+### 2026-07-07 (~5 h)
+
+- **Done:** Closed `v0.3-eval` — an evaluation harness + the first measured baseline for both RAG stages. Eval tooling (question generation, faithfulness judging) uses Claude Opus via the Anthropic API; the RAG system under test stays fully local.
+  - **Synthetic known-item set** (`eval/synthetic.py`): Opus wrote one realistic question per abstract for 150 deterministically-sampled abstracts (seed 0) → `evals/synthetic_queries.jsonl`. Each question's source abstract = the known-relevant target. Frozen + committed.
+  - **Retrieval metrics** (`eval/metrics.py`, `eval/retrieval.py`): in-repo recall@k / MRR / nDCG (no RAGAS). **Baseline (n=150): recall@5=0.91, MRR=0.78, nDCG@5=0.81.** k-sweep showed recall flattening after k=5 → **k=5 justified by evidence** (was an untuned guess).
+  - **Faithfulness judge** (`eval/judge.py`, `eval/generation.py`): Opus scores whether an answer's claims are supported by its retrieved sources. **Baseline (n=30): faithful rate=0.80, mean score=0.90.** Mean > rate ⇒ failures are partial, not fabrication.
+  - **Characterised the failure mode**: all 6 failures across 30 queries are **citation misattribution** (right finding, wrong source / overstated) — quantifies the v0.2 knee-extension anecdote and points the v0.4/v0.5 fix at citation precision.
+  - **Gold expert set: tooled but deferred to v0.4** (`eval/label_gold.py`, `gold_queries_seed.jsonl`). Pooling candidates from a single retriever (bge) causes self-pooling bias (misses never enter the pool → optimistic recall); v0.4's hybrid search enables a multi-method pool. Labels are reusable, so waiting costs nothing.
+  - **11 eval tests** (all pure/GPU-free/API-free via fakes → run in CI). `eval` dependency extra (`anthropic`) kept out of core/CI.
+- **Learned:**
+  - **Two eval stages, measured separately.** Retrieval (recall/MRR/nDCG) and generation (faithfulness) fail independently; you need both to know *what* to fix. faithful ≠ correct — faithfulness judges grounding in the *retrieved* context, not correctness.
+  - **Recall needs a denominator you can't fully know** (incomplete-judgments problem). Synthetic dodges it (denominator=1 by construction); the gold set needs *pooling* (judge retrieved candidates, assume the rest irrelevant) — and pooling from a single system is self-biased.
+  - **Metrics differ in what they see.** recall = found or not; MRR = rank of first hit (steep 1/rank); nDCG = full ranking with log discount (earns its keep only with multiple relevant docs — nearly redundant on our single-relevant synthetic set). `1/MRR` is the harmonic-mean rank, not the arithmetic average.
+  - **API model ≠ chat model.** The judge needs Claude callable *from code* (Anthropic API key, separate billing) — the interactive Claude Code chat can't be called by a script, and the harness must be an automated pipeline anyway.
+- **Next:** `v0.4-rag-improved` — hybrid (vector+BM25) search + reranker + query rewriting; build the gold set with a multi-method pool; report the measured lift over this baseline.

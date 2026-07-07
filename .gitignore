@@ -53,3 +53,6 @@ logs/
 *.log
 wandb/
 mlruns/
+
+# Local-only personal notes (learning log, scratch) — never commit
+_local/

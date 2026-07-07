@@ -35,6 +35,11 @@ ml = [
     "bitsandbytes>=0.43",          # 4-bit (NF4) quantization; has Windows wheels
     "qdrant-client>=1.11",         # local vector store
 ]
+# Eval tooling (v0.3): Claude as LLM-judge + synthetic-question generation.
+# Only the *evaluator* uses an API model; the RAG generator stays local Qwen.
+eval = [
+    "anthropic>=0.40",
+]
 
 # Pull PyTorch from the CUDA 12.1 wheel index (GPU build) rather than the
 # default CPU-only wheels. Matches the RTX 3060 (Ampere) + recent driver.
