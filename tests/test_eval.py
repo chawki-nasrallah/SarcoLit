@@ -119,6 +119,14 @@ def test_judge_parse_json_extracts_object() -> None:
     assert parsed["score"] == 0.8
 
 
+def test_judge_parse_json_ignores_trailing_text() -> None:
+    # The failure that killed a run: valid JSON followed by extra prose.
+    raw = '{"faithful": false, "score": 0.3}\n\nNote: some trailing explanation.'
+    parsed = judge._parse_json(raw)
+    assert parsed["faithful"] is False
+    assert parsed["score"] == 0.3
+
+
 # --- generation eval runner (fake pipeline + fake judge, no GPU/API) --------
 
 

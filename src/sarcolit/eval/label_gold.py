@@ -1,17 +1,22 @@
-"""Interactive labelling tool to build the gold eval set (v0.3-eval).
+"""Interactive labelling tool to build the gold eval set (multi-method pool, v0.4).
 
-For each seed query it retrieves a deep candidate pool (top-N via the retriever)
-and asks you — the domain expert — to mark which candidates are relevant. Writes
-``evals/gold_queries.jsonl``. Resumable: already-labelled queries are skipped, so
-you can label in chunks.
+For each seed query it builds a **multi-method candidate pool** — the union of
+what bge (dense/semantic) retrieves and what BM25 (sparse/keyword) retrieves —
+and asks you, the domain expert, to mark which candidates are relevant. Writes
+``evals/gold_queries.jsonl``. Resumable: already-labelled queries are skipped.
 
-Pooling caveat: only the retrieved pool is judged; anything not surfaced is
-assumed irrelevant. Pool is deep (top-20) to mitigate; broaden with keyword
-search once v0.4 adds it.
+Why the union: pooling from a single retriever is self-biased (a relevant doc it
+misses never enters the pool). Pooling bge ∪ BM25 means every doc *either* method
+surfaces gets judged, so the labels are a fair denominator for comparing bge vs
+hybrid. (Docs no method surfaces are still assumed irrelevant — the residual,
+smaller, pooling approximation.)
+
+You judge *relevance only* (binary), not order and not any answer. The ranking
+metrics get their order from the retriever under test, not from you.
 
 Run:  ``uv run python -m sarcolit.eval.label_gold``
-Controls per query: type the relevant numbers (e.g. ``1 4 9``); ``n`` = none
-relevant; ``s`` = skip this query for now; ``q`` = save and quit.
+Controls per query: relevant numbers (e.g. ``1 4 9``); ``n`` none; ``s`` skip;
+``q`` save and quit.
 """
 
 from __future__ import annotations
@@ -21,7 +26,7 @@ from pathlib import Path
 
 SEED_PATH = Path("evals/gold_queries_seed.jsonl")
 OUT_PATH = Path("evals/gold_queries.jsonl")
-POOL_SIZE = 20
+POOL_EACH = 15  # top-N from each method; union is the pool
 SNIPPET = 260
 
 
@@ -45,6 +50,39 @@ def _parse_selection(raw: str, n: int) -> list[int] | None:
     return sorted(set(picks))
 
 
+def _pool(hybrid, query: str, pool_each: int) -> list:
+    """Union of bge top-N and BM25 top-N as SearchHits (dense first, dedup)."""
+    from sarcolit.retrieval.search import SearchHit
+
+    dense = hybrid.base.search(query, k=pool_each)
+    sparse_pmids = hybrid.bm25.search(query, pool_each)
+
+    seen: set[str] = set()
+    pool: list[SearchHit] = []
+    for h in dense:
+        if h.pmid not in seen:
+            seen.add(h.pmid)
+            pool.append(h)
+    for pmid in sparse_pmids:
+        if pmid in seen:
+            continue
+        seen.add(pmid)
+        r = hybrid.by_pmid[pmid]
+        pool.append(
+            SearchHit(
+                pmid=pmid,
+                score=0.0,
+                title=r["title"],
+                abstract=r["abstract"],
+                year=r.get("year"),
+                journal=r.get("journal", ""),
+                authors=r.get("authors", []),
+                doi=r.get("doi"),
+            )
+        )
+    return pool
+
+
 def label() -> None:
     seed = _load_jsonl(SEED_PATH)
     done = {r["query"] for r in _load_jsonl(OUT_PATH)}
@@ -53,19 +91,22 @@ def label() -> None:
         print(f"All {len(seed)} queries already labelled -> {OUT_PATH}")
         return
 
-    print(f"{len(done)} done, {len(todo)} to label. Pool size {POOL_SIZE}.")
-    print("Per query: relevant numbers (e.g. '1 4 9') | 'n' none | 's' skip | 'q' quit.\n")
+    print(f"{len(done)} done, {len(todo)} to label. Pool = bge + BM25 (top-{POOL_EACH} each).")
+    print("Per query: relevant numbers (e.g. '1 4 9') | 'n' none | 's' skip | 'q' quit.")
+    print("\nLoading retriever + building BM25 index (first launch ~30-60s)...", flush=True)
 
-    from sarcolit.retrieval.search import Retriever  # lazy: heavy import
+    from sarcolit.retrieval.hybrid import HybridRetriever  # lazy: heavy import
 
-    retriever = Retriever()
+    hybrid = HybridRetriever()
+    print("Ready.\n", flush=True)
     try:
         with OUT_PATH.open("a", encoding="utf-8") as fh:
             for qi, item in enumerate(todo, 1):
-                hits = retriever.search(item["query"], k=POOL_SIZE)
+                pool = _pool(hybrid, item["query"], POOL_EACH)
                 print("=" * 78)
-                print(f"[{qi}/{len(todo)}] QUERY ({item.get('subtopic', '')}): {item['query']}\n")
-                for i, h in enumerate(hits, 1):
+                print(f"[{qi}/{len(todo)}] QUERY ({item.get('subtopic', '')}): {item['query']}")
+                print(f"  ({len(pool)} candidates in pool)\n")
+                for i, h in enumerate(pool, 1):
                     print(f"  [{i:2d}] ({h.year}) {h.title}")
                     print(f"       {h.abstract[:SNIPPET].strip()}...")
                 while True:
@@ -76,11 +117,11 @@ def label() -> None:
                     if raw.strip().lower() == "s":
                         print("  skipped.\n")
                         break
-                    picks = _parse_selection(raw, len(hits))
+                    picks = _parse_selection(raw, len(pool))
                     if picks is None:
                         print("  invalid — enter numbers in range, 'n', 's', or 'q'.")
                         continue
-                    relevant = [hits[i].pmid for i in picks]
+                    relevant = [pool[i].pmid for i in picks]
                     fh.write(
                         json.dumps(
                             {
@@ -96,7 +137,7 @@ def label() -> None:
                     print(f"  saved {len(relevant)} relevant.\n")
                     break
     finally:
-        retriever.close()
+        hybrid.close()
     print(f"done -> {OUT_PATH}")
 
 

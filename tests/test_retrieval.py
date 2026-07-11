@@ -18,8 +18,21 @@ pytest.importorskip("qdrant_client")
 
 from qdrant_client import QdrantClient  # noqa: E402
 
-from sarcolit.retrieval import index, search  # noqa: E402
+from sarcolit.retrieval import index, rerank, search  # noqa: E402
 from sarcolit.retrieval.embedding import EMBED_DIM  # noqa: E402
+
+
+def _hit(pmid: str, score: float, title: str = "T", abstract: str = "A") -> search.SearchHit:
+    return search.SearchHit(
+        pmid=pmid,
+        score=score,
+        title=title,
+        abstract=abstract,
+        year=None,
+        journal="",
+        authors=[],
+        doi=None,
+    )
 
 
 class StubEmbedder:
@@ -99,3 +112,83 @@ def test_retriever_ranks_nearest_first_and_maps_payload() -> None:
     assert hits[0].title == "Handgrip strength thresholds"
     assert hits[0].score >= hits[1].score  # sorted by descending similarity
     assert isinstance(hits[0], search.SearchHit)
+
+
+# --- reranking retriever (fakes, no GPU) -----------------------------------
+
+
+class _FakeBase:
+    def __init__(self, hits: list) -> None:
+        self.hits = hits
+
+    def search(self, query: str, k: int) -> list:
+        return self.hits[:k]
+
+    def close(self) -> None:
+        pass
+
+
+class _FakeReranker:
+    """Returns fixed positional scores for the candidate docs."""
+
+    def __init__(self, scores: list[float]) -> None:
+        self.scores = scores
+
+    def score(self, query: str, docs: list[str]) -> list[float]:
+        return self.scores[: len(docs)]
+
+
+def test_reranking_retriever_reorders_and_truncates() -> None:
+    # bge order A,B,C; reranker scores make C best, then A, then B.
+    hits = [_hit("1", 0.9, "A"), _hit("2", 0.8, "B"), _hit("3", 0.7, "C")]
+    rr = rerank.RerankingRetriever(
+        base=_FakeBase(hits), reranker=_FakeReranker([0.1, 0.0, 0.9]), fetch_k=3
+    )
+    out = rr.search("q", k=2)
+    assert [h.pmid for h in out] == ["3", "1"]  # C then A, top-2 after rerank
+
+
+def test_reranking_retriever_empty() -> None:
+    rr = rerank.RerankingRetriever(base=_FakeBase([]), reranker=_FakeReranker([]), fetch_k=3)
+    assert rr.search("q", k=5) == []
+
+
+# --- hybrid retrieval (RRF + fakes, no GPU/BM25) ---------------------------
+
+
+def test_rrf_fuse_boosts_docs_high_in_both() -> None:
+    from sarcolit.retrieval.hybrid import rrf_fuse
+
+    dense = ["a", "b", "c"]
+    sparse = ["c", "d", "a"]
+    fused = [pmid for pmid, _ in rrf_fuse([dense, sparse], rrf_k=60)]
+    # a and c appear in both lists → outrank the singletons b, d.
+    assert set(fused[:2]) == {"a", "c"}
+    assert set(fused[2:]) == {"b", "d"}
+
+
+def test_hybrid_retriever_fuses_and_builds_hits(tmp_path) -> None:
+    from sarcolit.retrieval import hybrid
+
+    records = [
+        {"pmid": "1", "title": "A", "abstract": "aa"},
+        {"pmid": "2", "title": "B", "abstract": "bb"},
+        {"pmid": "3", "title": "C", "abstract": "cc"},
+    ]
+    corpus = tmp_path / "c.jsonl"
+    corpus.write_text("\n".join(json.dumps(r) for r in records), encoding="utf-8")
+
+    # dense order 2,1,3 ; sparse order 2,3,1 → doc 2 is rank-1 in both → top.
+    dense_hits = [_hit("2", 0.9, "B", "bb"), _hit("1", 0.8, "A", "aa"), _hit("3", 0.7, "C", "cc")]
+
+    class _FakeBM25:
+        def search(self, query: str, k: int) -> list[str]:
+            return ["2", "3", "1"][:k]
+
+    hr = hybrid.HybridRetriever(
+        base=_FakeBase(dense_hits), bm25=_FakeBM25(), corpus_path=corpus, fetch_k=3
+    )
+    out = hr.search("q", k=3)
+    assert out[0].pmid == "2"  # rank-1 in both lists → highest RRF
+    assert isinstance(out[0], search.SearchHit)
+    assert out[0].title == "B"

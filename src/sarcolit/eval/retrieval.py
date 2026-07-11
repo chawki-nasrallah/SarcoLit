@@ -40,6 +40,8 @@ def run_retrieval_eval(
     query_path: Path,
     ks: Sequence[int] = (1, 3, 5, 10),
     retriever=None,
+    rerank: bool = False,
+    hybrid: bool = False,
 ) -> tuple[dict[str, float], int]:
     """Retrieve for every query and return (metrics, n_queries)."""
     items = load_query_set(query_path)
@@ -47,9 +49,18 @@ def run_retrieval_eval(
 
     created = retriever is None
     if created:
-        from sarcolit.retrieval.search import Retriever  # lazy: avoids torch import
+        if rerank:
+            from sarcolit.retrieval.rerank import RerankingRetriever
 
-        retriever = Retriever()
+            retriever = RerankingRetriever()
+        elif hybrid:
+            from sarcolit.retrieval.hybrid import HybridRetriever
+
+            retriever = HybridRetriever()
+        else:
+            from sarcolit.retrieval.search import Retriever  # lazy: avoids torch
+
+            retriever = Retriever()
 
     try:
         results = []
@@ -68,10 +79,15 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Run retrieval eval over a query set.")
     ap.add_argument("--queries", type=Path, default=Path("evals/synthetic_queries.jsonl"))
     ap.add_argument("--ks", type=int, nargs="+", default=[1, 3, 5, 10])
+    ap.add_argument("--rerank", action="store_true", help="add cross-encoder reranking")
+    ap.add_argument("--hybrid", action="store_true", help="dense + BM25 (RRF fusion)")
     args = ap.parse_args()
 
-    metrics, n = run_retrieval_eval(args.queries, ks=tuple(args.ks))
-    print(f"retrieval eval over {n} queries ({args.queries}):\n")
+    metrics, n = run_retrieval_eval(
+        args.queries, ks=tuple(args.ks), rerank=args.rerank, hybrid=args.hybrid
+    )
+    mode = "bge + rerank" if args.rerank else "bge + BM25 (hybrid)" if args.hybrid else "bge only"
+    print(f"retrieval eval over {n} queries ({mode}):\n")
     for key, val in metrics.items():
         print(f"  {key:12s} {val:.3f}")
 

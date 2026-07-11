@@ -34,6 +34,7 @@ ml = [
     "accelerate>=0.34",
     "bitsandbytes>=0.43",          # 4-bit (NF4) quantization; has Windows wheels
     "qdrant-client>=1.11",         # local vector store
+    "rank-bm25>=0.2",              # sparse/lexical retrieval for hybrid search (v0.4)
 ]
 # Eval tooling (v0.3): Claude as LLM-judge + synthetic-question generation.
 # Only the *evaluator* uses an API model; the RAG generator stays local Qwen.

@@ -1,0 +1,276 @@
+{
+  "summary": {
+    "n": 30,
+    "faithful_rate": 0.7,
+    "mean_faithfulness_score": 0.8733333333333333
+  },
+  "results": [
+    {
+      "query": "How does aging affect the timing of tibialis anterior and gastrocnemius co-contraction and ankle propulsion during different phases of walking?",
+      "answer": "Aging affects the timing of tibialis anterior and gastrocnemius co-contraction and ankle propulsion during different phases of walking. Specifically, older adults exhibit increased co-contraction in early and mid-stance phases, and reduced co-contraction in terminal stance compared to younger adults. This change is associated with altered ankle joint mechanics, such as increased dorsiflexion in late stance and pre-swing, reduced plantarflexion moments in mid-stance, and lower braking and propulsive ground reaction forces. These alterations likely contribute to slower gait, reduced mechanical efficiency, and increased fall risk.\n\n[1]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims (increased co-contraction in early/mid-stance, reduced in terminal stance, increased late-stance/pre-swing dorsiflexion, reduced mid-stance plantarflexion moments, lower braking/propulsive GRF, slower gait, reduced efficiency, elevated fall risk) are directly supported by source [1]."
+    },
+    {
+      "query": "Does adding CT-based muscle quality measurements to grip strength and gait speed improve prediction of mortality and complications after heart surgery?",
+      "answer": "Yes, adding CT-based muscle quality measurements to grip strength and gait speed improves the prediction of mortality and complications after heart surgery. Studies [2] and [4] indicate that these components, along with other clinical factors, enhance the discriminative capacity for mortality. Specifically, [2] shows that sarcopenic obesity, as measured by CT, is associated with increased risk of mortality after cardiovascular surgery. Similarly, [4] demonstrates that grip strength and gait speed, when added to other clinical factors, improve the C-index, suggesting they provide additional risk information beyond standard clinical risk factors. \n\n[2] [PMID: 30928108]\n[4] [PMID: 38842791]\n\nTherefore, combining CT-based muscle quality measurements with clinical factors like grip strength and gait speed can better predict outcomes after heart surgery.",
+      "faithful": false,
+      "score": 0.3,
+      "unsupported_claims": [
+        "Studies [2] and [4] indicate that these components enhance the discriminative capacity for mortality (the answer should have cited [5], which directly addresses adding CT-based SMD to grip strength and gait speed)",
+        "[4] demonstrates that grip strength and gait speed improve the C-index suggesting they provide additional risk information - [4] actually concludes they generate only MODEST adjunctive risk information and are not about heart surgery or CT muscle quality",
+        "[2] is about sarcopenic obesity mortality but does not address adding CT to grip strength/gait speed for improved prediction"
+      ],
+      "reasoning": "The answer's core claim is actually best supported by source [5], which the answer never cites; instead it cites [2] and [4]. Source [4] is misrepresented (it found only modest added value and concerns general populations, not heart surgery), and [2] does not test adding CT muscle quality on top of grip strength and gait speed. The most directly relevant source [5] is omitted."
+    },
+    {
+      "query": "Is there a link between WHO intrinsic capacity decline and sarcopenia risk in elderly diabetic patients?",
+      "answer": "Yes, there is a link between intrinsic capacity (IC) decline and sarcopenia risk in elderly diabetic patients. \n\n[2] (PMID: 40833515, 2025) indicates that in older adults with type 2 diabetes, a greater number of impaired IC domains was associated with increased odds of sarcopenia. This suggests that IC impairment is related to an increased risk of sarcopenia in this population.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The answer's central claim—that a greater number of impaired IC domains was associated with increased odds of sarcopenia in older adults with type 2 diabetes—is directly and accurately supported by source [2], which specifically studied this diabetic population."
+    },
+    {
+      "query": "How accurate is the Ishii score chart based on age, grip strength, and calf circumference for detecting sarcopenia in older adults attending outpatient clinics?",
+      "answer": "Based on the Ishii screening test, the accuracy for detecting sarcopenia in older adults attending outpatient clinics is quite high. The Ishii score chart shows a high diagnostic accuracy, with a sensitivity of 84% and a specificity of 86.1% for estimating the probability of sarcopenia. These values indicate that the test performs well in identifying sarcopenia, with a good balance between sensitivity and specificity. \n\n[PMID: 34665450]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The answer's claims — sensitivity of 84% and specificity of 86.1% for probable sarcopenia in a geriatric outpatient clinic setting — are directly supported by source [1], which reports these exact values against the diagnosis of probable sarcopenia."
+    },
+    {
+      "query": "child with early hypotonia and upper limb weakness showing fiber type grouping on biopsy but negative SMN testing — what non-progressive condition could this be?",
+      "answer": "Based on the information provided in Abstract [1], a possible non-progressive condition that fits the described scenario is Benign Infantile Neurogenic Muscle Atrophy (BINDA). BINDA is characterized by early hypotonia and upper limb weakness, with fiber type grouping on biopsy but negative SMN testing, which aligns with the given case details.\n\n[1] [PMID: 16376048]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The answer's claims—early hypotonia, upper limb weakness, fiber type grouping on biopsy, negative SMN testing, and a non-progressive (improving) course—are all directly supported by source [1], which describes benign infantile neurogenic muscle atrophy predominantly involving the upper extremities. The acronym 'BINDA' is a minor labeling addition but does not introduce an unsupported factual claim."
+    },
+    {
+      "query": "Can sarcopenia-specific quality of life questionnaires detect changes in health status over time better than generic tools like SF-36 or EQ-5D in older adults?",
+      "answer": "Yes, sarcopenia-specific quality of life questionnaires can detect changes in health status over time better than generic tools like SF-36 or EQ-5D in older adults. \n\n[1] demonstrates that the SarQoL® questionnaire, a sarcopenia-specific tool, has good responsiveness, indicating it can detect changes in health status over time. This is supported by the fact that it confirmed eight out of nine hypotheses on the correlation between SarQoL® scores and other generic tools (SF-36, EQ-5D) after a 2-year interval, with a standardized response mean significantly higher than those of the generic tools.\n\n[2] also supports this finding, stating that subjects with sarcopenia demonstrate a significantly high proportion of problems relating to several dimensions of quality of life, suggesting that sarcopenia-specific questionnaires are more sensitive to detecting changes in health status compared to generic tools.\n\n[3] further supports this by showing that the SarQoL® questionnaire has good discriminative power and correlations with domains captured by generic tools like SF-36 and EQ-5D, indicating it can effectively detect changes in health status.\n\nTherefore, sarcopenia-specific questionnaires like SarQoL® are more responsive to detecting changes in health status over time compared to generic tools in older adults.",
+      "faithful": false,
+      "score": 0.6,
+      "unsupported_claims": [
+        "[2] supports that sarcopenia-specific questionnaires are more sensitive to detecting changes in health status compared to generic tools",
+        "[3] indicates SarQoL® can effectively detect changes in health status over time"
+      ],
+      "reasoning": "The core claim from [1] is well supported (higher SRM than SF-36/EQ-5D, 8/9 hypotheses confirmed, good responsiveness). However, [2] only discusses that sarcopenic subjects have QoL problems and suggests using disease-specific tools would be more insightful; it does not demonstrate superior sensitivity to change. [3] concerns cross-sectional discriminative power and validity, not responsiveness/change over time, so attributing change-detection to it is unsupported."
+    },
+    {
+      "query": "Can low skeletal muscle mass measured by bioimpedance help predict the risk of another stroke in patients who already had a TIA or lacunar stroke?",
+      "answer": "Yes, low skeletal muscle mass measured by bioimpedance can help predict the risk of another stroke in patients who already had a TIA or lacunar stroke. [PMID: 36682124] This prospective cohort study found that patients with low skeletal muscle mass (SMI) had a significantly higher risk of recurrent cerebrovascular events compared to those with normal SMI. Specifically, using the Davison criterion, 89% of patients with recurrent events had low SMI, whereas only 56% of those without recurrent events did. The study also noted that low SMI was associated with other risk factors like diabetes and higher arterial stiffness. Thus, low skeletal muscle mass measured by bioimpedance is an independent predictor of recurrent events in patients with TIA or lacunar stroke.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims—the predictive role of low SMI, the 89% vs 56% figures using Davison criteria, the association with diabetes and arterial stiffness, and independent predictor status—are directly supported by source [1]."
+    },
+    {
+      "query": "In obese heart failure patients with reduced ejection fraction, does low muscle mass affect exercise capacity independently of body fat?",
+      "answer": "Yes, in obese heart failure patients with reduced ejection fraction, low muscle mass (sarcopenia) affects exercise capacity independently of body fat (obesity). This is supported by [1], where patients with sarcopenic obesity (SO) demonstrated lower absolute peak VO2, oxygen uptake efficiency slope, and exercise time compared to non-sarcopenic obese (NSO) patients with heart failure with reduced ejection fraction (HFrEF). These findings suggest that sarcopenia, rather than obesity alone, is associated with reduced cardiorespiratory fitness in this patient population.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims (lower peak VO2, OUES, exercise time in SO vs NSO, and independence of adiposity) are directly supported by source [1], which found no fat mass differences between groups and SMMI remained a significant predictor of peak VO2 after adjusting for adiposity."
+    },
+    {
+      "query": "Does low psoas muscle mass on preoperative CT predict complications or infections after rectal cancer surgery?",
+      "answer": "Yes, low psoas muscle mass on preoperative CT predicts complications or infections after rectal cancer surgery. \n\n[1] [PMID: 34309711] reports that sarcopenia (low psoas muscle area) was associated with higher rates of postoperative complications, including infections, after rectal resection for rectal cancer. Specifically, the sarcopenia group had a 46.9% rate of postoperative complications compared to 29.6% in the non-sarcopenia group, with a significant difference (P = 0.028). Additionally, the sarcopenia group had a higher rate of postoperative remote infections (12.2% vs. 2.8%, P = 0.012).\n\n[2] [PMID: 31489510] also suggests that reduced muscle mass, specifically in the psoas muscle, correlates with postoperative muscle atrophy and subsequent complications after rectal cancer surgery. It notes that cross-sectional areas of rectus abdominis and psoas muscles reduce following surgery, indicating atrophy of these muscles.",
+      "faithful": false,
+      "score": 0.7,
+      "unsupported_claims": [
+        "[2] suggests reduced muscle mass correlates with postoperative complications after rectal cancer surgery",
+        "[2] indicates atrophy is associated with subsequent complications"
+      ],
+      "reasoning": "Claims from [1] are accurately supported with correct statistics. However, [2] only studied postoperative muscle atrophy (reduction in muscle area following surgery) and did not assess any link between muscle mass and postoperative complications or infections; attributing a complication-prediction role to [2] is unsupported."
+    },
+    {
+      "query": "What molecular changes signal the earliest stages of muscle aging in middle age, before clinical sarcopenia develops?",
+      "answer": "The earliest stages of muscle aging in middle age, before clinical sarcopenia develops, are signaled by molecular changes such as aberrant metabolism, impaired insulin sensitivity, and a gradual reduction in muscle mass. These changes are evident in middle-aged muscle, indicating that decline begins long before overt sarcopenia [PMID: 41155437]. \n\n[PMID: 41155437] suggests that middle-aged muscle exhibits aberrant metabolism, impaired insulin sensitivity, and an early, gradual reduction in mass, suggesting that decline begins long before overt sarcopenia.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims (aberrant metabolism, impaired insulin sensitivity, early gradual reduction in mass, decline beginning before overt sarcopenia) are directly stated in source [1] (PMID: 41155437), which is correctly cited."
+    },
+    {
+      "query": "How does muscle wasting relate to COPD, and what factors explain the wide variation in reported sarcopenia rates among COPD patients?",
+      "answer": "Muscle wasting, or sarcopenia, is frequently observed in COPD patients, leading to a reduction in muscle mass and function. This condition contributes to the overall frailty and reduced quality of life in COPD patients. \n\nThe wide variation in reported sarcopenia rates among COPD patients can be explained by several factors. Firstly, the presence of sarcopenia varies significantly depending on the severity of COPD, as indicated by the GOLD classification. Patients in the most severe stages (GOLD E) have the highest rates of sarcopenia (70%), while those in less severe stages (GOLD A and B) show lower rates (21% and 18%, respectively). \n\nSecondly, the heterogeneity in the definition and measurement of sarcopenia across studies contributes to the variability. Different methods such as muscle biopsy, DXA, BIA, and MRI are used to assess muscle mass and function, leading to inconsistent results.\n\nLastly, individual patient factors such as age, sex, comorbidities, and inflammation levels play a role. For instance, patients with more severe COPD and higher levels of systemic inflammation tend to exhibit greater muscle wasting. \n\n[PMID: 26848065], [PMID: 39011123], [PMID: 41764783], [PMID: 40240077], [PMID: 41247691]",
+      "faithful": false,
+      "score": 0.85,
+      "unsupported_claims": [
+        "Patients in GOLD A and B show sarcopenia rates of 21% and 18%, respectively (specific numeric values not reported in any source)"
+      ],
+      "reasoning": "Most claims are well-supported: sarcopenia's association with COPD frailty and reduced quality of life (source 4), highest rate in GOLD E at 70% (source 5), measurement/definition heterogeneity (source 3), and age/sex/comorbidity/inflammation factors (sources 2, 4). However, the specific figures of 21% and 18% for GOLD A and B are not found in any source; source 5 only reports the overall 39.5% and the 70% for Group E."
+    },
+    {
+      "query": "Can grip strength testing help identify postmenopausal women at risk of combined bone and muscle loss, and how common is this condition in that population?",
+      "answer": "Yes, grip strength testing can help identify postmenopausal women at risk of combined bone and muscle loss. Grip strength is a marker of muscle mass and strength, which are positively associated with bone mineral density (BMD) in postmenopausal women. Studies show that low appendicular muscle mass (aMM) correlates with lower femoral neck BMD, indicating that muscle mass loss can lead to bone loss. \n\nIn the SarcoPhAge cohort, 26 out of 126 women (20.6%) diagnosed with sarcopenia also had osteoporosis, suggesting that low muscle mass is associated with increased risk of osteoporosis. However, the prevalence of combined bone and muscle wasting in this population is not explicitly stated in the provided abstracts. \n\nThe prevalence of combined bone and muscle wasting in elderly women from the SarcoPhAge cohort is not detailed in the given abstracts. Preliminary results indicate a significant association between low muscle mass and lower femoral neck BMD, but the overall prevalence in the SarcoPhAge cohort is not specified. \n\nTherefore, while grip strength testing can help identify women at risk of combined bone and muscle loss, the specific prevalence in postmenopausal women is not clearly addressed in the provided abstracts.",
+      "faithful": false,
+      "score": 0.6,
+      "unsupported_claims": [
+        "26 out of 126 women (20.6%) diagnosed with sarcopenia also had osteoporosis",
+        "the prevalence of combined bone and muscle wasting in this population is not explicitly stated / not detailed in the abstracts"
+      ],
+      "reasoning": "Source [4] states 26 women (20.6%) were sarcopenic and 34 (27.0%) osteoporotic, with 46.1% of sarcopenic subjects being osteoporotic — the answer misattributes the 20.6% (sarcopenia prevalence) as the sarcopenia-plus-osteoporosis overlap. Additionally, the answer wrongly claims the concomitant prevalence is not stated, when [4] actually provides overlap figures (46.1% of sarcopenic were osteoporotic)."
+    },
+    {
+      "query": "Can surface EMG detect early muscle aging from a sedentary lifestyle before changes show up in muscle mass or strength tests?",
+      "answer": "Yes, the high-density surface electromyography (HD-sEMG) can detect early muscle aging from a sedentary lifestyle before changes show up in muscle mass or strength tests. This is supported by [1], where it was shown that HD-sEMG indexes were correlated to age and significantly different between sedentary subjects aged 45-54 years and active ones at the same age. Additionally, the HD-sEMG technique outperformed clinical and DXA parameters in detecting muscle aging and physical inactivity-related \"early aging.\" [1] demonstrates that HD-sEMG can identify early signs of muscle aging associated with a sedentary lifestyle before muscle mass or strength tests show significant changes.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims (HD-sEMG detects early sedentary-related muscle aging, indexes correlated with age, differences between sedentary and active 45-54 year-olds, outperforming clinical and DXA parameters, and clinical parameters not differing significantly) are directly supported by source [1]."
+    },
+    {
+      "query": "Are antiganglioside antibodies typically present in Guillain-Barré syndrome triggered by COVID-19, and what mechanisms besides autoimmunity might explain the neurological damage?",
+      "answer": "Based on the provided abstracts, antiganglioside antibodies have been detected in some cases of Guillain-Barré syndrome (GBS) associated with SARS-CoV-2 infection. For example, in one case report [2], patients with SARS-CoV-2-infection-related GBS showed positivity for immunoglobulin G antibody against ganglioside complex of GM1 and phosphatidic acid. \n\nHowever, the presence of these antibodies does not necessarily indicate autoimmunity. Instead, the abstracts suggest that other mechanisms might contribute to the neurological damage. For instance, [1] mentions that non-immune abnormalities such as hyperinflammation following cytokine storms and microvascular disorders due to vascular endothelial damage may lead to neurological symptoms in patients with SARS-CoV-2 infection. \n\nIn summary, while antiganglioside antibodies can be present, their role is not solely related to autoimmunity. Other non-immune mechanisms like inflammation and vascular damage might also play a role in the development of neurological symptoms in SARS-CoV-2-associated GBS.",
+      "faithful": false,
+      "score": 0.4,
+      "unsupported_claims": [
+        "Antiganglioside antibodies have been detected in some cases of GBS associated with SARS-CoV-2 infection",
+        "In one case report [2], patients with SARS-CoV-2-infection-related GBS showed positivity for IgG antibody against ganglioside complex of GM1 and phosphatidic acid"
+      ],
+      "reasoning": "The answer misattributes source [2] (which is about AMAN/finger drop sign and Campylobacter jejuni, NOT SARS-CoV-2) as showing antiganglioside antibodies in COVID-19-related GBS. Source [1] actually states antiganglioside antibody tests were negative in most SARS-CoV-2-related GBS cases, contradicting the answer's main claim. The mechanism claim from [1] (hyperinflammation, cytokine storm, microvascular damage) is correctly supported."
+    },
+    {
+      "query": "Can muscle ultrasound combined with grip strength predict death better than bioimpedance in dialysis patients with sarcopenia?",
+      "answer": "Yes, muscle ultrasound combined with grip strength can predict death better than bioimpedance in dialysis patients with sarcopenia. \n\n[1] [2] Both studies indicate that ultrasound-assessed muscle thickness and handgrip strength together perform better than lean tissue index assessed by bioimpedance spectroscopy in predicting mortality in hemodialysis patients. In [1], the combination of low handgrip strength and low quadriceps muscle thickness index significantly predicted higher mortality. In [2], ultrasound measurement of the rectus femoris muscle (RFM) thickness was found to have a good correlation with bioimpedance and was proposed as a complementary parameter for sarcopenic risk classification. \n\n[PMID: 38263531, 40155221]",
+      "faithful": false,
+      "score": 0.6,
+      "unsupported_claims": [
+        "[2] indicates that ultrasound combined with handgrip strength performs better than bioimpedance in predicting mortality",
+        "Both studies show ultrasound outperforms bioimpedance in predicting mortality"
+      ],
+      "reasoning": "Source [1] supports the mortality-prediction superiority claim, but source [2] did not assess mortality at all — it evaluated diagnostic/classification value for sarcopenia risk (AUC similar to bioimpedance), so attributing mortality-prediction superiority to [2] is unsupported."
+    },
+    {
+      "query": "How does aging affect antagonist muscle co-contraction around the ankle during balance tasks performed at different movement speeds?",
+      "answer": "Aging affects antagonist muscle co-contraction around the ankle during balance tasks performed at different movement speeds. Specifically, elderly subjects exhibit larger co-contraction indices (CI) in both speed conditions compared to young subjects. Young subjects show increased muscle co-contraction in the fast speed condition compared to the preferred speed condition, whereas elderly subjects do not show a significant difference in muscle co-contraction between the two speed conditions. This indicates that fast movements cause different influences on dynamic postural control in elderly people, highlighting the differences in the speed effects on muscle co-contraction of the ankle joint between the two age groups. [PMID: 28764814]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims (larger CI in elderly in both speeds, young increasing CI with fast speed, elderly showing no speed difference, and the interpretation about fast movements) are directly supported by source [1] (PMID: 28764814)."
+    },
+    {
+      "query": "Can bedside ultrasound be used to assess muscle size and quality for diagnosing sarcopenia, and does it predict outcomes like mortality or disability?",
+      "answer": "Yes, bedside ultrasound can be used to assess muscle size and quality for diagnosing sarcopenia. It has been validated in various settings and can predict health-related outcomes such as death and functional disability [PMID: 36538042]. Additionally, it shows good intra-rater and inter-rater reliability, making it a reliable tool for diagnosing sarcopenia [PMID: 39203903].\n\nIt predicts health outcomes like mortality and disability [PMID: 36538042], indicating its potential to influence clinical decisions. However, further research is needed to validate its applications in the context of sarcopenia assessment [PMID: 28202349].",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims are supported: source [2] explicitly states muscle ultrasound assesses size and quality, has been validated to predict outcomes like death and functional disability; source [4] demonstrates good intra- and inter-rater reliability; source [5] states further studies should validate its applications in sarcopenia assessment."
+    },
+    {
+      "query": "Can rapid correction of hyperthyroidism with radioiodine trigger acute myopathy with elevated creatine kinase, and how is it managed?",
+      "answer": "Yes, rapid correction of hyperthyroidism with radioiodine can trigger acute myopathy with elevated creatine kinase. This is evidenced by the cases described in abstracts [1] and [2]. In these studies, patients experienced neuromuscular symptoms and signs, including weakness and elevated creatine kinase levels, following a rapid decline in thyroid hormones. Treatment with hormone replacement led to resolution of symptoms and normalization of muscle enzyme serum levels.\n\n[1] [2]",
+      "faithful": false,
+      "score": 0.6,
+      "unsupported_claims": [
+        "Abstract [2] describes cases of radioiodine-induced myopathy following rapid decline in thyroid hormones",
+        "In hyperthyroidism, elevated creatine kinase correlated with neuromuscular symptoms (source [2] states CK did NOT correlate with weakness)"
+      ],
+      "reasoning": "The core mechanism (radioiodine causing rapid hormone decline leading to hypothyroid myopathy with CK elevation, resolving with hormone replacement) is supported by [1]. However, [2] does not describe radioiodine-triggered myopathy; it studied newly diagnosed thyroid dysfunction and explicitly found serum CK did NOT correlate with weakness, contradicting the answer's implication that elevated CK accompanied the weakness in that source."
+    },
+    {
+      "query": "Can videofluoroscopic tracking of hyoid and laryngeal movement be used to monitor swallowing recovery in elderly patients with sarcopenic dysphagia treated by nutrition and rehab?",
+      "answer": "Yes, videofluoroscopic tracking of hyoid and laryngeal movement can be used to monitor swallowing recovery in elderly patients with sarcopenic dysphagia treated by nutrition and rehab. This method has been demonstrated in [1], where improvements in maximum displacements and maximum moving velocities of the hyoid bone and thyroid cartilage during swallowing were noted following intervention. This suggests that videofluoroscopic tracking can indeed serve as a tool to monitor recovery in such patients.\n\n[1] [PMID: 31058647]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims—the use of videofluoroscopy to track hyoid/thyroid cartilage displacement and velocity, improvements after nutrition-plus-rehab intervention, and its usefulness for monitoring recovery—are directly supported by source [1]."
+    },
+    {
+      "query": "How does aging affect spinal stretch reflex modulation in the calf muscles across the gait cycle in middle-aged versus younger adults?",
+      "answer": "Aging affects spinal stretch reflex modulation in the calf muscles across the gait cycle in middle-aged versus younger adults. Middle-aged subjects exhibit a lower normalized H-reflex amplitude during the swing phase compared to younger adults, indicating changes in spinal stretch reflex modulation during walking in middle-aged individuals. This suggests that aging may influence the spinal stretch reflex during the swing phase of walking, potentially impacting stretch reflex contribution to ankle extensor neural drive and ankle stiffness in elderly persons during walking.\n\n[1] [PMID: 24801567]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The claim about lower normalized H-reflex amplitude during swing phase in middle-aged subjects and no difference in muscle activity is directly supported by source [1]. The statement about impact on ankle extensor neural drive and ankle stiffness in elderly is supported by source [2]. Though [2] is not cited, all substantive claims are supported by the provided sources."
+    },
+    {
+      "query": "Does low grip strength or dynapenia affect quality of life differently in older men versus women?",
+      "answer": "Based on the provided abstracts, there is no direct evidence comparing how low grip strength or dynapenia affects quality of life differently in older men versus women. Abstract [2] provides data suggesting that lower grip strength and dynapenia are associated with lower quality of life in women but not in men. However, this comparison is specific to one study and does not encompass all available data. Therefore, the answer based on the given information is:\n\nThe provided data suggest that low grip strength and dynapenia may affect quality of life differently in older women compared to men, but this finding is based on a single study and cannot be generalized to all older adults. Further research is needed to confirm these differences across genders.\n\n[2] [PMID: 40813634]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The answer's central claim—that lower grip strength and dynapenia were associated with poor HRQoL in women but not men—is directly supported by source [2], which reports significant associations in women (including dynapenia aOR=1.497) and no significant association in men. The caveat that this is based on a single study is accurate given the sources."
+    },
+    {
+      "query": "In type 2 diabetes patients, does the loss of ankle muscle strength actually depend on peripheral nerve damage, or can weakness occur even without neuropathy?",
+      "answer": "Based on the information provided in the abstracts, the loss of ankle muscle strength in type 2 diabetes patients does not necessarily depend on peripheral nerve damage. While diabetic polyneuropathy (DPN) is associated with muscle weakness, it is not the sole cause. \n\nIn [1], the study found that while patients with diabetic polyneuropathy (DPN) had diminished nerve function and muscle strength, there was no significant correlation between nerve function and muscle strength. This suggests that muscle weakness can occur independently of nerve damage.\n\nAdditionally, [3] indicates that motor unit loss and weakness in association with diabetic neuropathy can be observed in humans, but it does not specify that nerve damage is always present. Instead, it shows that even in the absence of DPN, there is still a reduction in muscle strength and motor unit numbers.\n\nTherefore, the answer is that muscle weakness can occur in type 2 diabetes patients without peripheral nerve damage. It is possible for muscle strength to be compromised due to other factors such as insulin resistance, hyperglycemia, and muscle fat infiltration, which are hypothesized as fundamental biological mechanisms leading to muscle impairment in people with diabetes. [PMID: 21755507, 23629918]",
+      "faithful": false,
+      "score": 0.6,
+      "unsupported_claims": [
+        "[3] shows that even in the absence of DPN, there is still a reduction in muscle strength and motor unit numbers",
+        "[3] does not specify that nerve damage is always present"
+      ],
+      "reasoning": "The core claim about [1] (weakness independent of nerve function, DC group also weaker) is well supported, and the mechanisms from [2] are correctly cited. However, the characterization of [3] is contradicted by the source: [3] studied patients WITH DPN and directly linked motor unit loss to neuropathy, not weakness in the absence of DPN."
+    },
+    {
+      "query": "Can strength training improve muscle function in Alzheimer's patients by reducing intestinal permeability, and do gut leakage markers like zonulin correlate with grip strength?",
+      "answer": "Yes, resistance exercise can potentially reduce intestinal permeability and improve muscle function in Alzheimer's patients. Intestinal permeability, indicated by markers such as zonulin, correlates with grip strength. Studies show that resistance exercise reduces plasma zonulin levels and improves grip strength in patients with Alzheimer's disease, suggesting a link between intestinal barrier function and muscle function.\n\n[1] [2]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims—resistance exercise reducing zonulin and improving grip strength in AD patients, and zonulin correlating with grip strength—are directly supported by source [1], which reports RE reduced plasma zonulin/claudin-3, improved HGS, and found robust relationships between zonulin changes and HGS. The correlation between zonulin and HGS is also supported by [2]."
+    },
+    {
+      "query": "Which blood-based markers correlate with muscle strength, walking speed, and sarcopenia risk in older patients?",
+      "answer": "Blood-based markers such as interleukin-8 (IL-8), p-tau181, and neurofilament light chain (NfL) correlate with muscle strength, walking speed, and sarcopenia risk in older patients. Specifically, higher IL-8 levels are associated with lower appendicular lean mass (ALM) and increased risk of sarcopenia [PMID: 29101476]. Additionally, p-tau181 and NfL are independently associated with worse sarcopenia trajectories and increased sarcopenia incidence, especially in older individuals and males [PMID: 40490961].\n\n[PMID: 29101476] [PMID: 40490961]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims are supported: source [1] states higher IL-8 associated with lower ALM and increased sarcopenia risk, and source [3] states p-tau181 and NfL were independently associated with worse sarcopenia trajectories and incidence, especially in older individuals and males."
+    },
+    {
+      "query": "Does radiation dose to the pancreas during adjuvant chemoradiotherapy for gastric cancer increase the risk of developing muscle loss, and how does that affect patient outcomes?",
+      "answer": "Yes, the radiation dose to the pancreas during adjuvant chemoradiotherapy for gastric cancer increases the risk of developing muscle loss, specifically sarcopenia. According to [PMID: 30122263], there is a positive correlation between higher doses of radiation to the pancreas and a higher rate of sarcopenia. Specifically, the sarcopenia rate at 6 months and 12 months was significantly higher in patients with higher doses of radiation to the pancreas. Additionally, sarcopenia was identified as an independent prognostic factor for gastric cancer patients, indicating that it can negatively impact patient outcomes.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims—positive correlation between higher pancreatic radiation dose and sarcopenia rate, higher sarcopenia rates at 6 and 12 months, and sarcopenia as an independent prognostic factor with poorer survival—are directly supported by source [1] (PMID: 30122263)."
+    },
+    {
+      "query": "Which combination of AWGS 2019 sarcopenia components best predicts future falls and mobility problems in older adults, and does using SPPB versus grip strength change the prognostic value?",
+      "answer": "According to the studies, the combination of low muscle mass and physical performance (using the Short Physical Performance Battery, SPPB) defined by the Asian Working Group for Sarcopenia (AWGS) 2019 guideline shows the highest predictive value for future falls and mobility problems in older adults. Specifically, using the SPPB as a diagnostic tool increases the predictive validity for falls with fractures and instrumental activities of daily living (IADL) disabilities compared to using low muscle mass and hand grip strength alone.\n\n[1] [PMID: 37209713] demonstrates that the combination of low muscle mass and physical performance (using the SPPB) increases the risk of falls and IADL disabilities. \n\n[2] [PMID: 39542034] finds that the Sarcopenia Definitions and Outcomes Consortium (SDOC) criteria, which includes both muscle mass and physical performance, provides similar prognostic capabilities to the AWGS 2019 criteria for all-cause mortality in older patients with heart failure. However, it does not explicitly state the specific components that show the highest predictive value for falls and mobility problems.\n\nIn summary, using the SPPB as a diagnostic tool improves the predictive validity for falls with fractures and IADL disabilities compared to using low muscle mass and hand grip strength alone. Using the SPPB enhances the prognostic value for these outcomes.",
+      "faithful": true,
+      "score": 0.95,
+      "unsupported_claims": [],
+      "reasoning": "The core claims all derive from source [1], which states that sarcopenia defined by low muscle mass plus physical performance predicts mobility disability and falls, that using SPPB improves predictive validity for falls with fracture and IADL disability, and that low muscle mass plus grip strength showed no associations. The citation to [2] regarding SDOC and AWGS 2019 equivalence for mortality in heart failure is accurately characterized. The answer's claims are well-grounded in the sources."
+    },
+    {
+      "query": "Is there a relationship between serum oxysterol levels, gut microbiome composition, and the combined presence of cognitive decline and muscle loss in older adults?",
+      "answer": "Based on the provided abstracts, there is no direct evidence linking serum oxysterol levels, gut microbiome composition, and the combined presence of cognitive decline and muscle loss in older adults. The abstracts focus primarily on the relationship between the gut microbiome and muscle mass, strength, and performance in older adults, but do not specifically address serum oxysterol levels or cognitive decline. Therefore, the answer is:\n\nThere is no direct evidence presented in the given abstracts regarding the relationship between serum oxysterol levels, gut microbiome composition, and the combined presence of cognitive decline and muscle loss in older adults.\n\n[PMID: 39338129], [PMID: 39796514], [PMID: 41507594], [PMID: 41722622], [PMID: 31319564]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The answer correctly states that the sources do not address serum oxysterol levels or cognitive decline, and only cover the gut microbiome-muscle relationship, which is accurate for all five abstracts. This is a faithful 'insufficient information' response."
+    },
+    {
+      "query": "Does low grip strength predict worse survival in advanced liver cancer patients treated with hepatic arterial chemotherapy plus immunotherapy?",
+      "answer": "Yes, low grip strength (handgrip strength) predicts worse survival in advanced liver cancer patients treated with hepatic arterial chemotherapy plus immunotherapy. This finding is supported by [PMID: 41459515].\n\nIn this study, patients with reduced handgrip strength (less than 28kg for males and 18kg for females) had significantly poorer overall survival (OS) and progression-free survival (PFS) compared to those with non-sarcopenic status. Sarcopenia was identified as an independent prognostic factor for poor outcomes.",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims—the HGS cutoffs (28kg male/18kg female), poorer OS and PFS in sarcopenic patients, and sarcopenia as an independent prognostic factor—are directly supported by source [1], which studied HAIC combined with targeted immunotherapy in unresectable HCC."
+    },
+    {
+      "query": "What are the reference cross-sectional area thresholds for the geniohyoid muscle measured by ultrasound to detect swallowing muscle loss in sarcopenic dysphagia?",
+      "answer": "Based on Abstract [1], the cross-sectional area (CSA) threshold for the geniohyoid muscle to detect swallowing muscle loss in sarcopenic dysphagia is 172.5 mm² for women and 194.7 mm² for men.\n\n[1] [PMID: 38587613]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "The answer correctly cites source [1]'s cut-off values of 172.5 mm² for women and 194.7 mm² for men for the geniohyoid muscle CSA to identify sarcopenic dysphagia."
+    },
+    {
+      "query": "How can you evaluate pectoralis major atrophy versus tear in a patient with internal rotation weakness after shoulder replacement when MRI isn't an option due to the implant?",
+      "answer": "To evaluate pectoralis major atrophy versus tear in a patient with internal rotation weakness after shoulder replacement when MRI isn't an option due to the implant, ultrasound can be utilized. As demonstrated in [1], ultrasound can effectively diagnose pectoralis major muscle atrophy, which was identified as a cause of persistent internal rotation weakness in a patient with multiple previous surgeries and a shoulder implant. The ultrasound guided the management of the patient, avoiding surgical repair of a torn pectoralis major muscle and allowing continuation of physical therapy. Therefore, ultrasound is a suitable alternative method for evaluating pectoralis major atrophy versus tear in such cases.\n\n[1] [PMID: 25251253]",
+      "faithful": true,
+      "score": 1.0,
+      "unsupported_claims": [],
+      "reasoning": "All claims in the answer—that ultrasound diagnosed pectoralis major atrophy as a cause of internal rotation weakness in a patient with a shoulder implant contraindicating MRI, that it guided management by ruling out a tear, and avoided surgery allowing continued physical therapy—are directly supported by source [1]."
+    }
+  ]
+}

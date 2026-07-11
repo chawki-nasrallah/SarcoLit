@@ -17,7 +17,6 @@ from __future__ import annotations
 import argparse
 import json
 import random
-import re
 from pathlib import Path
 
 from anthropic import Anthropic
@@ -54,11 +53,12 @@ def load_corpus(path: Path = CORPUS_PATH) -> list[dict]:
 
 
 def _parse_json(text: str) -> dict:
-    """Extract the first JSON object from the model's response."""
-    match = re.search(r"\{.*\}", text, re.S)
-    if not match:
+    """Parse the first JSON object in the response, ignoring any trailing text."""
+    start = text.find("{")
+    if start == -1:
         raise ValueError(f"no JSON found in response: {text[:200]!r}")
-    return json.loads(match.group())
+    obj, _ = json.JSONDecoder().raw_decode(text[start:])
+    return obj
 
 
 def generate_question(client: Anthropic, record: dict) -> dict:

@@ -76,3 +76,22 @@ A dated record of work sessions. The format is deliberately simple so it doesn't
   - **Metrics differ in what they see.** recall = found or not; MRR = rank of first hit (steep 1/rank); nDCG = full ranking with log discount (earns its keep only with multiple relevant docs — nearly redundant on our single-relevant synthetic set). `1/MRR` is the harmonic-mean rank, not the arithmetic average.
   - **API model ≠ chat model.** The judge needs Claude callable *from code* (Anthropic API key, separate billing) — the interactive Claude Code chat can't be called by a script, and the harness must be an automated pipeline anyway.
 - **Next:** `v0.4-rag-improved` — hybrid (vector+BM25) search + reranker + query rewriting; build the gold set with a multi-method pool; report the measured lift over this baseline.
+
+---
+
+## 2026-W28 — week of 2026-07-06 (continued)
+
+### 2026-07-11 (~6 h) — `v0.4-rag-improved` closed
+
+- **Done:** An eval-driven milestone. Built and *measured* three RAG improvements against the v0.3 baseline; **none beat it, so none shipped.** The value is what measurement revealed + the gold set delivered.
+  - **Cross-encoder reranker** (`retrieval/rerank.py`, bge top-30 → `bge-reranker-base` → top-5): **rejected.** Hurt on synthetic (recall@1 0.70→0.667, MRR 0.784→0.761). Rerankers help weak/hard retrieval; our synthetic queries are near-ceiling for bge.
+  - **Hybrid search** (`retrieval/hybrid.py`, dense bge + sparse BM25, RRF fusion): **rejected.** Looked like a marginal synthetic win, but the **gold set reversed it** — on realistic expert-labelled queries bge beats hybrid on everything (MRR 1.00 vs 0.93, nDCG@5 0.921 vs 0.832). BM25 promotes keyword-sharing-but-less-relevant docs on natural-language queries.
+  - **Gold expert set** (`eval/label_gold.py` → `evals/gold_queries.jsonl`): 14 realistic queries, hand-labelled over a **fair multi-method pool** (bge ∪ BM25) — fixes the self-pooling bias that deferred it at v0.3.
+  - **Faithfulness prompt engineering: 3 variants A/B-tested, ALL hurt** (baseline 0.80 → strict rules 0.70 → +self-verify rule 0.667, n=30). Monotonically worse with more rules → reverted to the simplest baseline.
+  - Robustness fix: judge JSON parser → `raw_decode` (ignore trailing text) + per-item guard. 16 eval tests.
+- **Learned:**
+  - **The eval harness earns its keep by saying NO.** Three intuitive "improvements", all rejected by measurement. "Measured, ruled out the cheap fixes, found the real problem" > "stacked features."
+  - **The gold set can reverse a synthetic conclusion** — hybrid "helped" on synthetic, lost on realistic gold. Worth every minute of labelling. Multi-relevant queries → low recall@k (denominator), so nDCG/MRR are the metrics to read.
+  - **Prompting can't buy capability.** Misattribution is a 3B model-capability limit; no prompt rule adds the skill, and extra rules *degrade* a small model. → the fix is fine-tuning.
+  - **Measure, don't predict.** Tested a proposed prompt rule empirically rather than trusting the prediction — now data, not opinion.
+- **Next:** `v0.5-finetune` — LoRA/QLoRA fine-tune Qwen to fix the *located* bottleneck (attribution/faithfulness), measured against this baseline.

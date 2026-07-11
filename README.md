@@ -8,7 +8,7 @@ A retrieval-augmented LLM assistant for the sarcopenia and elderly muscle-health
 
 ## Status
 
-**Current tag:** `v0.3-eval` — evaluation harness + measured baseline. The RAG system (still fully **local and open-source**) now has numbers: retrieval recall@5 = 0.91, faithfulness = 0.80, with a characterised failure mode (citation misattribution). See [Eval results](#eval-results) and [Try it](#try-it). The generator remains local Qwen; only the eval *judge* uses an API model.
+**Current tag:** `v0.4-rag-improved` — an eval-driven milestone: three RAG improvements (reranker, hybrid search, prompt tuning) were built and measured against the `v0.3` baseline; **none beat it, so none shipped.** The finding is the value — retrieval is already strong, and the real bottleneck is the 3B model's attribution capability, which prompting can't fix → sets up `v0.5` fine-tuning. Also delivers the hand-labelled **gold eval set**. See [Eval results](#eval-results). Still fully **local and open-source** (only the eval judge uses an API model).
 
 ## Milestones
 
@@ -20,7 +20,7 @@ Each milestone is a tagged GitHub release with a dedicated release note in [`doc
 | `v0.1-corpus` | PubMed ingestion, cleaned sarcopenia/EMG corpus (7,004 abstracts) | ✅ done |
 | `v0.2-rag-baseline` | Naive embedding + retrieval + generation, first end-to-end answer | ✅ done |
 | `v0.3-eval` | Eval harness + measured baseline (recall@k/MRR/nDCG, faithfulness) | ✅ done |
-| `v0.4-rag-improved` | Hybrid search, reranker, query rewriting; measured lift over `v0.2` | ⬜ |
+| `v0.4-rag-improved` | Measured reranker/hybrid/prompt-tuning vs baseline (none adopted); gold eval set; bottleneck located | ✅ done |
 | `v0.5-finetune` | LoRA fine-tune of a small open model; eval comparison; model card | ⬜ |
 | `v0.6-agent` | Tool-using agent (PubMed search, citation tool) | ⬜ |
 | `v0.7-serve` | FastAPI + Docker + Gradio demo on HF Spaces | ⬜ |
@@ -33,9 +33,10 @@ Headline retrieval + generation metrics per tag, against the eval sets introduce
 
 | Tag | Recall@5 | MRR | nDCG@5 | Faithfulness | Notes |
 |---|---|---|---|---|---|
-| `v0.3-eval` (baseline) | 0.91 | 0.78 | 0.81 | 0.80 | synthetic known-item set: retrieval n=150, faithfulness n=30 (Opus judge). Optimistic (see release note); gold set at `v0.4`. |
+| `v0.3-eval` (baseline) | 0.91 | 0.78 | 0.81 | 0.80 | synthetic known-item set: retrieval n=150, faithfulness n=30 (Opus judge). |
+| `v0.4-rag-improved` | 0.91 | 0.78 | 0.81 | 0.80 | **config unchanged** — reranker, hybrid, and 3 prompt variants all measured, none beat baseline. Added **gold set** (realistic, n=14): MRR **1.00**, nDCG@5 **0.92** (bge). Bottleneck = model attribution → `v0.5`. |
 
-Failure mode at baseline: **citation misattribution** (answer's core finding correct, but a specific claim pinned to the wrong source) — the target for `v0.4`/`v0.5`. Full write-up: [`docs/releases/v0.3-eval.md`](docs/releases/v0.3-eval.md).
+Failure mode at baseline: **citation misattribution** (answer's core finding correct, but a specific claim pinned to the wrong source). `v0.4` proved prompting can't fix it (three variants, all worse) → the fix is fine-tuning (`v0.5`). Full write-ups: [`docs/releases/v0.3-eval.md`](docs/releases/v0.3-eval.md), [`docs/releases/v0.4-rag-improved.md`](docs/releases/v0.4-rag-improved.md).
 
 ## Project layout
 
@@ -54,7 +55,7 @@ sarcolit/
 
 - Python 3.12, [uv](https://github.com/astral-sh/uv) for environment + dependency management
 - `ruff` (lint + format), `pytest` (tests + eval markers)
-- **Retrieval:** `BAAI/bge-base-en-v1.5` embeddings via `transformers`, [`qdrant`](https://qdrant.tech/) local vector store
+- **Retrieval:** `BAAI/bge-base-en-v1.5` embeddings via `transformers`, [`qdrant`](https://qdrant.tech/) local vector store (BM25 hybrid + `bge-reranker-base` cross-encoder built and measured at `v0.4`, but bge-only ships — see release note)
 - **Generation:** `Qwen/Qwen2.5-3B-Instruct` in 4-bit NF4 (`bitsandbytes`) on GPU
 - **Eval:** in-repo metrics (recall@k/MRR/nDCG, faithfulness); Claude (`anthropic`) as LLM-judge — *eval tooling only; the RAG generator stays local*
 - _later:_ `peft`/`trl` for LoRA (`v0.5`), `fastapi`, `gradio`, HF Spaces for the demo (`v0.7`)

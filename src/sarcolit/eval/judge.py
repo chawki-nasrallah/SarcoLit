@@ -12,7 +12,6 @@ SearchHits). Faithfulness is scored per answer; the runner aggregates.
 from __future__ import annotations
 
 import json
-import re
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -51,10 +50,12 @@ ANSWER:
 
 
 def _parse_json(text: str) -> dict:
-    match = re.search(r"\{.*\}", text, re.S)
-    if not match:
+    """Parse the first JSON object in the response, ignoring any trailing text."""
+    start = text.find("{")
+    if start == -1:
         raise ValueError(f"no JSON found in judge response: {text[:200]!r}")
-    return json.loads(match.group())
+    obj, _ = json.JSONDecoder().raw_decode(text[start:])
+    return obj
 
 
 def format_sources(sources: list[dict]) -> str:

@@ -36,6 +36,8 @@ def run_generation_eval(
     k: int = 5,
     out_path: Path | None = REPORT_PATH,
     offset: int = 0,
+    rerank: bool = False,
+    hybrid: bool = False,
     pipeline=None,
     judge: Callable[[str, str, list[dict]], dict] | None = None,
 ) -> tuple[dict, list[dict]]:
@@ -46,7 +48,16 @@ def run_generation_eval(
     if created_pipeline:
         from sarcolit.generation.rag import RagPipeline  # lazy: avoids torch import
 
-        pipeline = RagPipeline(k=k)
+        if rerank:
+            from sarcolit.retrieval.rerank import RerankingRetriever
+
+            pipeline = RagPipeline(k=k, retriever=RerankingRetriever())
+        elif hybrid:
+            from sarcolit.retrieval.hybrid import HybridRetriever
+
+            pipeline = RagPipeline(k=k, retriever=HybridRetriever())
+        else:
+            pipeline = RagPipeline(k=k)
 
     if judge is None:
         from anthropic import Anthropic
@@ -65,7 +76,11 @@ def run_generation_eval(
             sources = [
                 {"pmid": h.pmid, "title": h.title, "abstract": h.abstract} for h in ans.sources
             ]
-            verdict = judge(item["query"], ans.answer, sources)
+            try:
+                verdict = judge(item["query"], ans.answer, sources)
+            except Exception as exc:  # noqa: BLE001 — one bad judge response shouldn't kill the run
+                print(f"[{i}/{len(queries)}] judge error, skipping: {exc}")
+                continue
             results.append(
                 {
                     "query": item["query"],
@@ -104,11 +119,19 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=15, help="number of queries to judge")
     ap.add_argument("--offset", type=int, default=0, help="skip the first N queries")
     ap.add_argument("--k", type=int, default=5, help="top-k passed to the RAG pipeline")
+    ap.add_argument("--rerank", action="store_true", help="add cross-encoder reranking")
+    ap.add_argument("--hybrid", action="store_true", help="dense + BM25 (RRF fusion)")
     ap.add_argument("--out", type=Path, default=REPORT_PATH)
     args = ap.parse_args()
 
     summary, _ = run_generation_eval(
-        args.queries, limit=args.limit, k=args.k, out_path=args.out, offset=args.offset
+        args.queries,
+        limit=args.limit,
+        k=args.k,
+        out_path=args.out,
+        offset=args.offset,
+        rerank=args.rerank,
+        hybrid=args.hybrid,
     )
     print(
         f"\nfaithful: {summary['faithful_rate']:.2f} "

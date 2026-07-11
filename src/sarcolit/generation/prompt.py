@@ -34,6 +34,12 @@ SYSTEM_PROMPT = (
     "plainly instead of guessing.\n"
     "- Be concise and precise."
 )
+# Note (v0.4): three stricter prompt variants were A/B-tested for faithfulness
+# (n=30, bge). ALL hurt vs this simplest baseline (rate 0.80): strict source
+# rules 0.70; + a self-verify rule 0.667 — monotonically worse with more rules.
+# Misattribution is a 3B model-capability limit, not a prompting gap (and extra
+# rules degrade a small model). Fix belongs in v0.5 (fine-tuning) or a
+# chain-of-verification pass, not the prompt.
 
 
 def format_context(passages: list[Passage]) -> str:
